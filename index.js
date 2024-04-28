@@ -41,6 +41,44 @@ async function run() {
             
             res.send(result)
         })
+
+        app.get('/add/:id', async(req,res)=> {
+            const id = req.params.id;
+            const query = { _id : new ObjectId(id)}
+            const result = await spotCollection.findOne(query)
+            res.send(result)
+        })
+
+        app.put('/add/:id', async(req,res)=> {
+            const id = req.params.id;
+            const query = { _id : new ObjectId(id)}
+            const options = { upsert: true };
+            const updatedSpot = req.body;
+            const update = {
+              $set: {
+                spot:updatedSpot.spot ,
+                photo:updatedSpot.photo ,
+                description:updatedSpot.description ,
+                 cost:updatedSpot.cost , 
+                 location:updatedSpot.location ,
+                  country:updatedSpot.country, 
+                  visitor:updatedSpot.visitor,
+                  season:updatedSpot.season,
+                  time:updatedSpot.time
+              },
+            };
+            const result = await spotCollection.updateOne(query, update, options);
+            res.send(result)
+          })
+
+          app.delete('/add/:id', async(req,res)=> {
+            const id = req.params.id;
+            const query = { _id : new ObjectId(id)}
+            const result = await spotCollection.deleteOne(query)
+            res.send(result)
+           
+          })
+          
         // myList
         app.get('/myList/:email', async(req,res)=> {
             console.log(req.params.email);
