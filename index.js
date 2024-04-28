@@ -32,13 +32,37 @@ async function run() {
         await client.connect();
 
         const spotCollection = client.db("spotDB").collection('spot');
+        const countryCollection = client.db("spotDB").collection('countries')
 
+// addSpot
         app.get('/add', async(req,res)=> {
             const cursor = spotCollection.find()
             const result = await cursor.toArray();
+            
             res.send(result)
         })
-        
+        // myList
+        app.get('/myList/:email', async(req,res)=> {
+            console.log(req.params.email);
+            const result =await spotCollection.find({email:req.params.email}).toArray()
+           
+            res.send(result)
+            
+        })
+        // country
+        app.get('/countries', async(req,res)=> {
+            const cursor = countryCollection.find()
+            const result = await cursor.toArray();
+           
+            res.send(result)
+            
+        })
+        app.get('/:country', async(req,res)=> {
+            console.log(req.params.country);
+            const result =await spotCollection.find({country:req.params.country}).toArray()
+           console.log(result);
+            res.send(result)
+        })
 
         app.post('/add', async (req, res)=>{
             const newSpot = req.body;
