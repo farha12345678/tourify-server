@@ -1,14 +1,13 @@
 const express = require('express')
 const cors = require('cors')
+
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 require('dotenv').config()
 const app = express()
 const port = process.env.PORT || 5000
-// middleware
-app.use(express.json())
-app.use(cors())
 
 
+app.use(cors());
 
 console.log(process.env.DB_USER);
 console.log(process.env.DB_PASS);
@@ -33,6 +32,8 @@ async function run() {
 
         const spotCollection = client.db("spotDB").collection('spot');
         const countryCollection = client.db("spotDB").collection('countries')
+
+        
 
 // addSpot
         app.get('/add', async(req,res)=> {
@@ -85,8 +86,7 @@ async function run() {
             const result =await spotCollection.find({email:req.params.email}).toArray()
            
             res.send(result)
-            
-        })
+            })
         // country
         app.get('/countries', async(req,res)=> {
             const cursor = countryCollection.find()
